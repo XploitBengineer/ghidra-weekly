@@ -12,6 +12,7 @@ build_ghidra()
     
     git clone https://github.com/NationalSecurityAgency/ghidra.git
     cd ghidra
+    gradle wrapper --gradle-version 7 
     gradle --init-script gradle/support/fetchDependencies.gradle init
     gradle buildGhidra
 
