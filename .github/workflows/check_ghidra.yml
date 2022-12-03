@@ -10,6 +10,27 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - run: chmod +x ./build_ghidra.sh && sudo ./build_ghidra.sh
+      - uses: actions/checkout@v2
+      - name: 'Set up JDK Env'
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+          java-package: 'jdk'
+      - name: "Install Ghidra dependencies"
+        run: sudo apt-get update && sudo apt-get install -y bison flex
+      - name: "Clone Ghidra"
+        run: git clone -b master "https://github.com/NationalSecurityAgency/ghidra.git" ghidra
+      #- name: "Apply patches"
+      #  run: git apply ../patches/*
+      #  working-directory: ./ghidra
+      - name: "Get dependencies"
+        run: "gradle --init-script gradle/support/fetchDependencies.gradle init"
+        working-directory: ./ghidra
+      - name: "Building Ghidra"
+        run: "gradle buildGhidra"
+        working-directory: ./ghidra
+      - name: "Upload package"
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Ghidra-Latest"
+          path: "ghidra/build/dist/*"
