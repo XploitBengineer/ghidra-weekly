@@ -2,7 +2,7 @@ name: Ghidra Commit Check
 
 on:
   schedule:
-    - cron:  '30 5 * * *'
+    - cron:  '30 4 *  * 1'
 
   workflow_dispatch:
 
