@@ -30,7 +30,7 @@ jobs:
         run: "gradle buildGhidra"
         working-directory: ./ghidra
       - name: "Upload package"
-        uses: actions/upload-artifact@v2
+        uses: laputansoft/github-tag-action@v4.6
         with:
           name: "Ghidra-Latest"
           path: "ghidra/build/dist/*"
