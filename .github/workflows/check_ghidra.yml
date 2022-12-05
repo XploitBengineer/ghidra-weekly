@@ -29,9 +29,13 @@ jobs:
       - name: "Building Ghidra"
         run: "gradle buildGhidra"
         working-directory: ./ghidra
+      - name: Tar files
+        run: tar -cvf ghidra.tar ghidra/build/dist
+      
+
       - name: "Upload package"
         uses: laputansoft/github-tag-action@v4.6
         with:
           name: "Ghidra-Latest"
-          path: "ghidra/build/dist/*"
+          path: "ghidra.tar"
           github_token: ${{ env.deploy }}
