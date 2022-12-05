@@ -34,3 +34,4 @@ jobs:
         with:
           name: "Ghidra-Latest"
           path: "ghidra/build/dist/*"
+          github_token: ${{ env.deploy }}
