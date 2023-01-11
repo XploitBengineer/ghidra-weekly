@@ -32,16 +32,14 @@ jobs:
         run: "gradle buildGhidra"
         working-directory: ./ghidra
       - name: Tar files
-        run: tar -cvf ghidra.tar ghidra/build/dist
-      
-      - uses: actions/checkout@v2
+        run: tar -cvf ghidra.tar ghidra/build/dist && echo "$(find / -name ghidra.tar 2>/dev/null)"
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          artifacts: "ghidra.tar"
+          artifacts: "ghidra,ghidra.tar,ghidra/*"
           tag: WEEKLY_BUILD
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
