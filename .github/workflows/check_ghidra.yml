@@ -34,8 +34,6 @@ jobs:
       - name: Tar files
         run: tar -cvf ghidra.tar ghidra/build/dist
       
-      - name: set env
-        run: echo "::set-env name=NOW::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
       - name: Create Release
         id: create_release
