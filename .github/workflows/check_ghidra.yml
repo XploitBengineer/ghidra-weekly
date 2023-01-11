@@ -34,6 +34,7 @@ jobs:
       - name: Tar files
         run: tar -cvf ghidra.tar ghidra/build/dist
       
+      - uses: actions/checkout@v2
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
