@@ -44,5 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           artifacts: "ghidra.tar"
-          tag: ${{ env.NOW }}
+          tag: WEEKLY_BUILD
+          commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
