@@ -34,12 +34,15 @@ jobs:
       - name: Tar files
         run: tar -cvf ghidra.tar ghidra/build/dist
       
+      - name: set env
+        run: echo "::set-env name=NOW::$(date +'%Y-%m-%dT%H:%M:%S')"
       - uses: actions/checkout@v2
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           artifacts: "ghidra.tar"
-          tag_name: ghidra_weekly
+          tag: ${{ env.NOW }}
+          token: ${{ secrets.GITHUB_TOKEN }}
