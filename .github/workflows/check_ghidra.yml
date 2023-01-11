@@ -32,9 +32,15 @@ jobs:
       - name: Tar files
         run: tar -cvf ghidra.tar ghidra/build/dist
       
-
-      - name: "Upload package"
-        uses: ncipollo/release-action@v1.12.0
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          github_token: ${{ env.deploy }}
-          artifacts: ghidra/ghidra.tar
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            This week's Ghidra build
+          draft: false
+          prerelease: false
