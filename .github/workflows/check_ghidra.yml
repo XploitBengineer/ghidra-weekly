@@ -31,15 +31,17 @@ jobs:
       - name: "Building Ghidra"
         run: "gradle buildGhidra"
         working-directory: ./ghidra
-      - name: Tar files
-        run: tar -cvf ghidra.tar ghidra/build/dist && echo "$(find / -name ghidra.tar 2>/dev/null)"
+    #  - name: Tar files
+    #    run: tar -cvf ghidra.tar ghidra/build/dist && echo "$(find / -name ghidra.tar 2>/dev/null)"
+      - name: set env
+        run: echo "NOW=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          artifacts: "ghidra,ghidra.tar,ghidra/*"
-          tag: WEEKLY_BUILD
+          artifacts: "ghidra/build/dist/*.zip"
+          tag: "WEEKLY_BUILD_${{ env.NOW }}"
           commit: main
           token: ${{ secrets.GITHUB_TOKEN }}
