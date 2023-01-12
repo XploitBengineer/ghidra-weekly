@@ -1,0 +1,47 @@
+name: "Build Ghidra from Source"
+
+on:
+  schedule:
+    - cron:  '30 4 *  * 1'
+
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Set up JDK Env'
+        uses: actions/setup-java@v1
+        with:
+          java-version: '17'
+          java-package: 'jdk'
+      - name: "Install Ghidra dependencies"
+        run: sudo apt-get update && sudo apt-get install -y bison flex
+      - name: "Clone Ghidra"
+        run: git clone -b master "https://github.com/NationalSecurityAgency/ghidra.git" ghidra
+      #- name: "Apply patches"
+      #  run: git apply ../patches/*
+      #  working-directory: ./ghidra
+      - name: "Get dependencies"
+        run: "gradle --init-script gradle/support/fetchDependencies.gradle init"
+        working-directory: ./ghidra
+      - name: "Building Ghidra"
+        run: "gradle buildGhidra"
+        working-directory: ./ghidra
+    #  - name: Tar files
+    #    run: tar -cvf ghidra.tar ghidra/build/dist && echo "$(find / -name ghidra.tar 2>/dev/null)"
+      - name: set env
+        run: echo "NOW=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          artifacts: "ghidra/build/dist/*.zip"
+          tag: "WEEKLY_BUILD_${{ env.NOW }}"
+          commit: main
+          token: ${{ secrets.GITHUB_TOKEN }}
